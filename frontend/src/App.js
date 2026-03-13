@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -8,15 +8,32 @@ import ChatPanel from "./components/Chat/ChatPanel";
 
 function AppInner() {
   const { isDark } = useTheme();
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 492);
 
-  const isMobileScreen = () =>
-    window.innerWidth <= 492 ||
-    (window.innerWidth <= 430 && window.innerHeight >= 800);
+  /* Detect screen resize */
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 492);
+    };
 
-  const handleOpen  = () => isMobileScreen() ? setMobileOpen(true)  : setSidebarOpen(true);
-  const handleClose = () => isMobileScreen() ? setMobileOpen(false) : setSidebarOpen(false);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  /* Sidebar open */
+  const handleOpen = () => {
+    if (isMobile) setMobileOpen(true);
+    else setSidebarOpen(true);
+  };
+
+  /* Sidebar close */
+  const handleClose = () => {
+    if (isMobile) setMobileOpen(false);
+    else setSidebarOpen(false);
+  };
 
   return (
     <div className={`app-root ${isDark ? "dark" : "light"}`}>
@@ -30,17 +47,21 @@ function AppInner() {
       {/* Sidebar */}
       <div className={`sidebar-wrap ${mobileOpen ? "sidebar-open" : ""}`}>
         <Sidebar
-          isOpen={isMobileScreen() ? true : sidebarOpen}
+          isOpen={isMobile ? mobileOpen : sidebarOpen}
           onOpen={handleOpen}
           onClose={handleClose}
         />
       </div>
 
-      {/* Main */}
+      {/* Main Layout */}
       <div className="main-area">
 
         <div className="center-col">
-          <Header sidebarOpen={sidebarOpen} onOpenSidebar={handleOpen} />
+          <Header
+            sidebarOpen={isMobile ? mobileOpen : sidebarOpen}
+            onOpenSidebar={handleOpen}
+          />
+
           <div className="graph-wrap">
             <GraphPlaceholder />
           </div>
