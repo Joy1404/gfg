@@ -46,18 +46,14 @@ function ChatPanel() {
   return (
     <aside className={`chat-panel ${theme}`}>
 
-      {/* Header */}
       <div className="chat-header">Chat</div>
 
-      {/* Messages */}
       <div className="chat-messages">
         {messages.map((msg) => (
           <ChatMessage key={msg.id} message={msg} />
         ))}
         <div ref={chatEndRef} />
       </div>
-
-      {/* Input Row */}
       <div className="chat-input-row">
 
         {/* Upload */}
@@ -77,8 +73,6 @@ function ChatPanel() {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-
-        {/* Send */}
         <button className="chat-send-btn" onClick={sendMessage} title="Send">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="22" y1="2" x2="11" y2="13" />

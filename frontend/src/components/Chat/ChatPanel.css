@@ -1,4 +1,4 @@
-/* ─── CHAT PANEL ─────────────────────────────────── */
+
 .chat-panel {
   display: flex;
   flex-direction: column;
@@ -10,7 +10,6 @@
 .dark  .chat-panel { background: #0d0d0d; border-left: 1px solid #222222; }
 .light .chat-panel { background: #ffffff; border-left: 1px solid #e0e0e0; }
 
-/* ─── CHAT HEADER ────────────────────────────────── */
 .chat-header {
   padding: 14px 16px;
   font-size: 11px;
@@ -23,7 +22,7 @@
 .dark  .chat-header { color: #555555; border-bottom: 1px solid #1e1e1e; }
 .light .chat-header { color: #aaaaaa; border-bottom: 1px solid #eeeeee; }
 
-/* ─── MESSAGES AREA ──────────────────────────────── */
+/* ─── MESSAGES AREA ───── */
 .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -38,7 +37,6 @@
 .dark  .chat-messages { scrollbar-color: #222 transparent; }
 .light .chat-messages { scrollbar-color: #ccc transparent; }
 
-/* ─── INPUT ROW ──────────────────────────────────── */
 .chat-input-row {
   display: flex;
   align-items: center;
@@ -51,7 +49,7 @@
 .dark  .chat-input-row { border-top: 1px solid #1e1e1e; }
 .light .chat-input-row { border-top: 1px solid #eeeeee; }
 
-/* ─── PLUS / UPLOAD BUTTON ───────────────────────── */
+/* ─── PLUS / UPLOAD BUTTON ─────────── */
 .chat-plus-btn {
   display: flex;
   align-items: center;
@@ -70,7 +68,7 @@
 .dark  .chat-plus-btn:hover { border-color: #444; color: #ccc; }
 .light .chat-plus-btn:hover { border-color: #aaa; color: #222; }
 
-/* ─── TEXT INPUT ─────────────────────────────────── */
+/* ─── TEXT INPUT ────── */
 .chat-input {
   flex: 1;
   border-radius: 6px;
@@ -99,7 +97,6 @@
 .dark  .chat-input:focus { border-color: #3b82f6; }
 .light .chat-input:focus { border-color: #2563eb; }
 
-/* ─── SEND BUTTON ────────────────────────────────── */
 .chat-send-btn {
   border: none;
   border-radius: 6px;
@@ -119,7 +116,7 @@
 .dark  .chat-send-btn:hover  { background: #1e4570; }
 .light .chat-send-btn:hover  { background: #bfdbfe; }
 
-/* ─── RESPONSIVE ─────────────────────────────────── */
+/* ─── RESPONSIVE ────── */
 @media (max-width: 768px) {
   .chat-panel {
     border-left: none !important;

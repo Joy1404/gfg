@@ -1,4 +1,4 @@
-/* ─── GRAPH PANEL ────────────────────────────────── */
+
 .graph-panel {
   flex: 1;
   border-radius: 8px;
@@ -15,14 +15,14 @@
 .dark  .graph-panel { background: #111111; border: 1px solid #222222; }
 .light .graph-panel { background: #f0f0f0; border: 1px solid #e0e0e0; }
 
-/* ─── SVG fills its container ────────────────────── */
+/* ─── SVG fills its container ──── */
 .graph-panel svg {
   display: block;
   width: 100%;
   height: 100%;
 }
 
-/* ─── RESPONSIVE ─────────────────────────────────── */
+/* ─── RESPONSIVE ───────*/
 @media (max-width: 768px) {
   .graph-panel { padding: 12px; border-radius: 6px; }
 }

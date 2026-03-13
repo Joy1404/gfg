@@ -21,7 +21,7 @@ body {
   border-radius: 4px;
 }  */
 
-/* ─── RESET ─────────────────────────────────────── */
+/* ─── RESET ─────── */
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -33,7 +33,6 @@ html, body, #root {
   width: 100%;
 }
 
-/* ─── ROOT ───────────────────────────────────────── */
 .app-root {
   display: flex;
   height: 100vh;
@@ -46,7 +45,7 @@ html, body, #root {
 .app-root.dark  { background: #0a0a0a; color: #e0e0e0; }
 .app-root.light { background: #f5f5f5; color: #111111; }
 
-/* ─── SIDEBAR WRAP ───────────────────────────────── */
+/* ─── SIDEBAR WRAP ──────── */
 .sidebar-wrap {
   flex-shrink: 0;
   height: 100vh;
@@ -54,7 +53,7 @@ html, body, #root {
   position: relative;
 }
 
-/* ─── MAIN AREA ──────────────────────────────────── */
+/* ─── MAIN AREA ────── */
 .main-area {
   flex: 1;
   display: flex;
@@ -63,7 +62,7 @@ html, body, #root {
   min-width: 0;
 }
 
-/* ─── CENTER COLUMN ──────────────────────────────── */
+/* ─── CENTER COLUMN ───── */
 .center-col {
   flex: 1;
   display: flex;
@@ -74,7 +73,7 @@ html, body, #root {
   min-width: 0;
 }
 
-/* ─── GRAPH WRAPPER ──────────────────────────────── */
+/* ─── GRAPH WRAPPER ──── */
 .graph-wrap {
   flex: 1;
   min-height: 0;
@@ -82,7 +81,7 @@ html, body, #root {
   overflow: hidden;
 }
 
-/* ─── CHAT WRAP ──────────────────────────────────── */
+/* ─── CHAT WRAP ─────── */
 .chat-wrap {
   width: 280px;
   flex-shrink: 0;
@@ -90,7 +89,7 @@ html, body, #root {
   overflow: hidden;
 }
 
-/* ─── SIDEBAR OVERLAY (mobile) ───────────────────── */
+/* ─── SIDEBAR OVERLAY (mobile) ───────────── */
 .sidebar-overlay {
   display: none;
   position: fixed;
@@ -100,7 +99,7 @@ html, body, #root {
 }
 .sidebar-overlay.visible { display: block; }
 
-/* ─── SCROLLBAR ──────────────────────────────────── */
+/* ─── SCROLLBAR ───────── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
@@ -108,16 +107,12 @@ html, body, #root {
 button { user-select: none; -webkit-user-select: none; }
 button:focus-visible { outline: 1px solid #3b82f6; outline-offset: 2px; }
 
-/* ══════════════════════════════════════════════════
-   TABLET  ≤ 1024px
-══════════════════════════════════════════════════ */
+/*  TABLET  ≤ 1024px  */
 @media (max-width: 1024px) {
   .chat-wrap { width: 240px; }
 }
 
-/* ══════════════════════════════════════════════════
-   SMALL TABLET  ≤ 768px
-══════════════════════════════════════════════════ */
+/*   SMALL TABLET  ≤ 768px  */
 @media (max-width: 768px) {
   .main-area { flex-direction: column; }
 
@@ -139,9 +134,8 @@ button:focus-visible { outline: 1px solid #3b82f6; outline-offset: 2px; }
   }
 }
 
-/* ══════════════════════════════════════════════════
-   MOBILE  ≤ 492px
-══════════════════════════════════════════════════ */
+/*
+   MOBILE  ≤ 492px */
 @media (max-width: 492px) {
   .app-root { position: relative; }
 
@@ -167,9 +161,8 @@ button:focus-visible { outline: 1px solid #3b82f6; outline-offset: 2px; }
   }
 }
 
-/* ══════════════════════════════════════════════════
-   TALL PHONE  412×915 / 410×910
-══════════════════════════════════════════════════ */
+/* 
+   TALL PHONE  412×915 / 410×910 */
 @media (max-width: 430px) and (min-height: 800px) {
   .app-root { position: relative; }
 
