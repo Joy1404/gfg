@@ -48,6 +48,8 @@ def chat(prompt: Chat):
         result = json.loads(sql_generator(prompt.message))
         sql = result["sql_query"]
         chart_type = result["chart_type"]
+        x_axis = result.get("x_axis")
+        y_axis = result.get("y_axis")
 
         columns, rows = fetch_data(sql)
         data = [dict(zip(columns, row)) for row in rows]
@@ -57,6 +59,8 @@ def chat(prompt: Chat):
             "prompt": prompt.message,
             "sql_query": sql,
             "chart_type": chart_type,
+            "x_axis": x_axis,
+            "y_axis": y_axis,
             "data": data
         }
     except Exception as e:
