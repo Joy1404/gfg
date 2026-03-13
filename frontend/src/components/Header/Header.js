@@ -4,12 +4,12 @@ import { useTheme } from "../../context/ThemeContext";
 
 const DOTS = ["#ff5f57", "#febc2e", "#28c840"];
 
-function Header({ sidebarOpen, onOpenSidebar }) {
+function Header({ sidebarOpen, onOpenSidebar, graphVisible }) {
   const { isDark, toggleTheme } = useTheme();
   const theme = isDark ? "dark" : "light";
 
   return (
-    <header className={`header ${theme}`}>
+    <header className={`header ${theme} ${!graphVisible ? "header-no-graph" : ""}`}>
 
       {/* Mobile Hamburger */}
       <button

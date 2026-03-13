@@ -5,16 +5,11 @@
   overflow: hidden;
   width: 100%;
   box-sizing: border-box;
-  transition: background 0.3s, border-color 0.3s;
+  transition: background 0.3s;
 }
 
-.dark  .chat-panel { background: #0d0d0d; border-left: 1px solid #222222; }
-.light .chat-panel { background: #ffffff; border-left: 1px solid #e0e0e0; }
-
-/* remove border when chat is fullwidth so it aligns with header */
-.chat-wrap.chat-expanded .chat-panel {
-  border-left: none;
-}
+.dark  .chat-panel { background: #0d0d0d; }
+.light .chat-panel { background: #ffffff; }
 
 /* ─── CHAT HEADER ─────── */
 .chat-header {
@@ -119,22 +114,19 @@
 
 /* ─── RESPONSIVE ────── */
 @media (max-width: 768px) {
-  .chat-panel {
-    border-left: none !important;
-    border-top: 1px solid #22222266;
-  }
+  .chat-input-row { padding: 8px; gap: 5px; }
 }
 
 @media (max-width: 492px) {
-  .chat-header { padding: 10px 12px; font-size: 10px; }
+  .chat-header   { padding: 10px 12px; font-size: 10px; }
   .chat-input-row { padding: 8px; gap: 5px; }
-  .chat-input { font-size: 12px; padding: 7px 10px; }
+  .chat-input    { font-size: 12px; padding: 7px 10px; }
   .chat-send-btn { padding: 0 10px; height: 30px; }
   .chat-plus-btn { width: 28px; height: 28px; }
 }
 
 @media (max-width: 430px) and (min-height: 800px) {
-  .chat-header { padding: 10px 12px; }
+  .chat-header   { padding: 10px 12px; }
   .chat-input-row { padding: 8px; }
-  .chat-input { font-size: 12px; }
+  .chat-input    { font-size: 12px; }
 }

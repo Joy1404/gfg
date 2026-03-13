@@ -48,10 +48,10 @@ function AppInner() {
           <Header
             sidebarOpen={isMobile ? mobileOpen : sidebarOpen}
             onOpenSidebar={handleOpen}
+            graphVisible={graphVisible}
           />
 
-          {/* Content area: graph + chat side by side */}
-          <div className="content-area">
+          <div className={`content-area ${graphVisible ? "" : "no-graph"}`}>
 
             <div className={`graph-wrap ${graphVisible ? "" : "graph-hidden"}`}>
               <GraphPlaceholder />

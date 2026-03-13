@@ -1,15 +1,11 @@
-
 .header {
   display: flex;
   align-items: center;
   gap: 12px;
-
   border-radius: 8px;
   padding: 10px 16px;
-
   flex-shrink: 0;
-
-  transition: background 0.3s, border-color 0.3s;
+  transition: background 0.3s, border-color 0.3s, margin-left 0.5s ease;
 }
 
 .dark .header {
@@ -22,15 +18,18 @@
   border: 1px solid #e0e0e0;
 }
 
+/* shift left 5px only when graph is hidden */
+.header.header-no-graph {
+  margin-left: 5px;
+}
 
+/* ─── HAMBURGER ───── */
 .header-hamburger {
   display: none;
   flex-direction: column;
   gap: 4px;
-
   background: none;
   border: none;
-
   cursor: pointer;
   padding: 4px 8px;
 }
@@ -38,48 +37,33 @@
 .header-hamburger-line {
   width: 18px;
   height: 2px;
-
   border-radius: 2px;
-
   transition: background 0.3s;
 }
 
-.dark .header-hamburger-line {
-  background: #888;
-}
+.dark .header-hamburger-line  { background: #888; }
+.light .header-hamburger-line { background: #555; }
 
-.light .header-hamburger-line {
-  background: #555;
-}
-
-
+/* ─── TITLE ───── */
 .header-title {
   flex: 1;
-
   font-size: 13px;
   letter-spacing: 0.08em;
-
   transition: color 0.3s;
 }
 
-.dark .header-title { color: #888; }
+.dark .header-title  { color: #888; }
 .light .header-title { color: #555; }
 
-
 /* ─── THEME TOGGLE ─────── */
-
 .header-theme-toggle {
   display: flex;
   align-items: center;
   gap: 6px;
-
   border-radius: 20px;
   padding: 4px 10px;
-
   cursor: pointer;
-
   font-size: 11px;
-
   transition: background 0.2s, border-color 0.2s;
 }
 
@@ -93,47 +77,29 @@
   border: 1px solid #d0d0d0;
 }
 
-
 .theme-toggle-track {
   width: 32px;
   height: 16px;
-
   border-radius: 8px;
-
   position: relative;
 }
 
-.dark .theme-toggle-track { background: #1a3a5c; }
+.dark .theme-toggle-track  { background: #1a3a5c; }
 .light .theme-toggle-track { background: #d1d5db; }
-
-
-/* ─── KNOB ────── */
 
 .theme-toggle-knob {
   position: absolute;
   top: 2px;
-
   width: 12px;
   height: 12px;
-
   border-radius: 50%;
-
   transition: left 0.25s ease;
 }
 
-.dark .theme-toggle-knob {
-  left: 16px;
-  background: #3b82f6;
-}
-
-.light .theme-toggle-knob {
-  left: 2px;
-  background: #fff;
-}
-
+.dark .theme-toggle-knob  { left: 16px; background: #3b82f6; }
+.light .theme-toggle-knob { left: 2px;  background: #fff; }
 
 /* ─── WINDOW DOTS ──── */
-
 .header-dots {
   display: flex;
   gap: 6px;
@@ -142,15 +108,11 @@
 .header-dot {
   width: 10px;
   height: 10px;
-
   border-radius: 50%;
 }
 
-
-/* ─── MOBILE ≤492px ──────── */
-
+/* ─── MOBILE ≤ 492px ──────── */
 @media (max-width: 492px) {
-
   .header-hamburger {
     display: flex;
   }
@@ -164,4 +126,7 @@
     font-size: 12px;
   }
 
+  .header.header-no-graph {
+    margin-left: 0; /* no shift on mobile — not needed */
+  }
 }
