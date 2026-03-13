@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from agent.tools.sql_generator import sql_generator
+from agent.workflow import chatbot, config
+from langchain_core.messages import HumanMessage, ToolMessage
 import psycopg2
 import json
 
@@ -45,27 +46,55 @@ def health():
 @app.post("/chat")
 def chat(prompt: Chat):
     try:
-        result = json.loads(sql_generator(prompt.message))
-        sql = result["sql_query"]
-        chart_type = result["chart_type"]
-        x_axis = result.get("x_axis")
-        y_axis = result.get("y_axis")
+        # Invoke the LangGraph chatbot — it decides whether to use tools
+        response = chatbot.invoke(
+            {"messages": [HumanMessage(content=prompt.message)]},
+            config=config
+        )
 
-        columns, rows = fetch_data(sql)
-        data = [dict(zip(columns, row)) for row in rows]
+        messages = response["messages"]
+        ai_response = messages[-1].content
 
-        return {
-            "success": True,
-            "prompt": prompt.message,
-            "sql_query": sql,
-            "chart_type": chart_type,
-            "x_axis": x_axis,
-            "y_axis": y_axis,
-            "data": data
-        }
+        # Check if sql_generator tool was called
+        tool_result = None
+        for msg in messages:
+            if isinstance(msg, ToolMessage):
+                try:
+                    tool_result = json.loads(msg.content)
+                except (json.JSONDecodeError, TypeError):
+                    pass
+
+        if tool_result and "sql_query" in tool_result:
+            # Data query — fetch results and return with chart info
+            sql = tool_result["sql_query"]
+            chart_type = tool_result["chart_type"]
+            x_axis = tool_result.get("x_axis")
+            y_axis = tool_result.get("y_axis")
+
+            columns, rows = fetch_data(sql)
+            data = [dict(zip(columns, row)) for row in rows]
+
+            return {
+                "success": True,
+                "type": "data",
+                "prompt": prompt.message,
+                "response": ai_response,
+                "sql_query": sql,
+                "chart_type": chart_type,
+                "x_axis": x_axis,
+                "y_axis": y_axis,
+                "data": data
+            }
+        else:
+            # Normal chat — just return the conversational response
+            return {
+                "success": True,
+                "type": "chat",
+                "prompt": prompt.message,
+                "response": ai_response
+            }
     except Exception as e:
         return {
             "success": False,
             "error": str(e)
         }
-
