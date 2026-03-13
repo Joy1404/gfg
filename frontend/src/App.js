@@ -12,28 +12,16 @@ function AppInner() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 492);
+  const [graphVisible, setGraphVisible] = useState(false);
 
-  /* Detect screen resize */
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 492);
-    };
-
+    const handleResize = () => setIsMobile(window.innerWidth <= 492);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  /* Sidebar open */
-  const handleOpen = () => {
-    if (isMobile) setMobileOpen(true);
-    else setSidebarOpen(true);
-  };
-
-  /* Sidebar close */
-  const handleClose = () => {
-    if (isMobile) setMobileOpen(false);
-    else setSidebarOpen(false);
-  };
+  const handleOpen  = () => isMobile ? setMobileOpen(true)  : setSidebarOpen(true);
+  const handleClose = () => isMobile ? setMobileOpen(false) : setSidebarOpen(false);
 
   return (
     <div className={`app-root ${isDark ? "dark" : "light"}`}>
@@ -55,23 +43,28 @@ function AppInner() {
 
       {/* Main Layout */}
       <div className="main-area">
-
         <div className="center-col">
+
           <Header
             sidebarOpen={isMobile ? mobileOpen : sidebarOpen}
             onOpenSidebar={handleOpen}
           />
 
-          <div className="graph-wrap">
-            <GraphPlaceholder />
+          {/* Content area: graph + chat side by side */}
+          <div className="content-area">
+
+            <div className={`graph-wrap ${graphVisible ? "" : "graph-hidden"}`}>
+              <GraphPlaceholder />
+            </div>
+
+            <div className={`chat-wrap ${graphVisible ? "" : "chat-expanded"}`}>
+              <ChatPanel onFirstMessage={() => setGraphVisible(true)} />
+            </div>
+
           </div>
         </div>
-
-        <div className="chat-wrap">
-          <ChatPanel />
-        </div>
-
       </div>
+
     </div>
   );
 }
