@@ -97,13 +97,13 @@ Your role is to help users understand their data, not just retrieve numbers.
 Always focus on delivering clear insights that help users make informed decisions.
                               ''')
    if not any(m.type == "system" for m in msg):
-      msg = [sys_prompt] + msg
+    msg = [sys_prompt] + msg
    try:
-      response= llm.invoke(msg)
-   except:
-      response = AIMessage(content="# Some error occured")
-   return {"messages":[response]}
-
+      response = llm.invoke(msg)
+   except Exception as e:
+      print("LLM ERROR:", e)
+      response = AIMessage(content=f"Error: {str(e)}")
+   return {"messages": [response]}
 # *****************tools*******************
 
 tools =[sql_generator

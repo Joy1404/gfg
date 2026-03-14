@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./ChatPanel.css";
 import ChatMessage from "./ChatMessage";
 import { useTheme } from "../../context/ThemeContext";
-import dummyResponses from "../../data/dummyResponses";
+//import dummyResponses from "../../data/dummyResponses";
 
 const initialMessages = [
   { id: 1, role: "assistant", loading: true }
@@ -56,63 +56,39 @@ function ChatPanel({ onFirstMessage }) {
   }, []);
 
   /* send message */
-  const sendMessage = () => {
+  const sendMessage = async () => {
+  const text = input.trim();
+  if (!text) return;
 
-    const text = input.trim();
-    if (!text) return;
+  const userMsg = { id: Date.now(), role: "user", text };
+  setMessages((prev) => [...prev, userMsg]);
+  setInput("");
 
-    if (messages.length === 1 && onFirstMessage) {
-      onFirstMessage();
-    }
+  try {
+    const res = await fetch("http://localhost:8000/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text }),
+    });
 
-    const userMsg = {
-      id: Date.now(),
-      role: "user",
-      text
+    const data = await res.json();
+
+    const botMsg = {
+      id: Date.now() + 1,
+      role: "assistant",
+      text: data.response,
     };
 
-    setMessages(prev => [...prev, userMsg]);
-    setInput("");
+    setMessages((prev) => [...prev, botMsg]);
 
-    const loadingId = Date.now() + 1;
-
-    /* loading animation */
-    setMessages(prev => [
-      ...prev,
-      { id: loadingId, role: "assistant", loading: true }
-    ]);
-
-    const response =
-      dummyResponses[Math.floor(Math.random() * dummyResponses.length)];
-
-    const words = response.split(" ");
-    let index = 0;
-
-    setTimeout(() => {
-
-      const interval = setInterval(() => {
-
-        index++;
-
-        setMessages(prev =>
-          prev.map(m =>
-            m.id === loadingId
-              ? {
-                  ...m,
-                  loading: false,
-                  text: words.slice(0, index).join(" ")
-                }
-              : m
-          )
-        );
-
-        if (index >= words.length) clearInterval(interval);
-
-      }, 60);
-
-    }, 900);
-
-  };
+  } catch (err) {
+    setMessages((prev) => [...prev, {
+      id: Date.now() + 2,
+      role: "assistant",
+      text: `⚠️ Error: ${err.message}`,
+    }]);
+  }
+};
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") sendMessage();
