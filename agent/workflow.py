@@ -9,6 +9,7 @@ from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.checkpoint.memory import InMemorySaver
 
 from agent.tools.sql_generator import sql_generator
+from agent.tools.fetch_db import fetch_data
 import uuid
 
 
@@ -106,11 +107,13 @@ Always focus on delivering clear insights that help users make informed decision
    return {"messages": [response]}
 # *****************tools*******************
 
-tools =[sql_generator
-        ]
+tools =[
+    sql_generator,
+    fetch_data
+]
 tool_node = ToolNode(tools)
 
-llm = ChatOpenAI(model="gpt-4o-mini").bind_tools(tools)
+llm = ChatOpenAI(model="gpt-5-nano-2025-08-07").bind_tools(tools)
 
 graph = StateGraph(chatstate)
 graph.add_node("chat_node",chat_node)

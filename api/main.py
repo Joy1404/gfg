@@ -46,6 +46,7 @@ def health():
 @app.post("/chat")
 def chat(prompt: Chat):
     try:
+        print("Received message:", prompt.message)
         # Invoke the LangGraph chatbot — it decides whether to use tools
         response = chatbot.invoke(
             {"messages": [HumanMessage(content=prompt.message)]},
@@ -60,7 +61,9 @@ def chat(prompt: Chat):
         for msg in messages:
             if isinstance(msg, ToolMessage):
                 try:
-                    tool_result = json.loads(msg.content)
+                    parsed_msg = json.loads(msg.content)
+                    if isinstance(parsed_msg, dict) and "sql_query" in parsed_msg:
+                        tool_result = parsed_msg
                 except (json.JSONDecodeError, TypeError):
                     pass
 
