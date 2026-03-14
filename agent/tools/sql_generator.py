@@ -5,38 +5,34 @@ from pydantic import BaseModel,Field
 import psycopg2
 import os
 import json
-
-load_dotenv()
-
-# schema 
 from pydantic import BaseModel, Field
 from typing import Optional
 
-class SQLResponse(BaseModel):
 
+load_dotenv()
+
+# model output format
+class SQLResponse(BaseModel):
     sql_query: str = Field(
-        description="PostgreSQL SELECT query written in a single line. Only use columns from the dataset."
-    )
+        description="PostgreSQL SELECT query written in a single line. Only use columns from the dataset.")
 
     chart_type: str = Field(
         description="Best chart type to visualize the query result",
-        examples=["metric", "bar", "line", "pie", "scatter"]
-    )
-
+        examples=["metric", "bar", "line", "pie", "scatter"])
     x_axis: Optional[str] = Field(
         description="Column name used for x-axis if the chart requires it",
-        default=None
-    )
-
+        default=None)
     y_axis: Optional[str] = Field(
         description="Column name used for y-axis if the chart requires it",
-        default=None
-    )
+        default=None)
+    
+# *************llm-models**************
 llm = ChatOpenAI(model="gpt-4o-mini")
-
 structured_llm = llm.with_structured_output(SQLResponse)
 
-def get_schema():
+
+# *************get schema and sample of dataset**************
+def get_schema_and_samples():
    conn = psycopg2.connect(
       host="aws-1-ap-southeast-1.pooler.supabase.com",
       database="postgres",
@@ -71,23 +67,33 @@ def get_schema():
 
       for col in columns:
          schema_text += f"- {col[0]} ({col[1]})\n"
+      # fetch sample rows
+      cur.execute(f"SELECT * FROM {table} LIMIT 5;")
+      rows = cur.fetchall()
 
+      if rows:
+         schema_text += "\nSample rows:\n"
+         for r in rows:
+               schema_text += f"{r}\n"
+
+      schema_text += "\n"
    cur.close()
    conn.close()
-
+   print(schema_text)
    return schema_text
 
-@tool
+# ************* Sql generator tool **************
+# @tool
 def sql_generator(question: str) -> dict:
    """
    Generate SQL query from a user question using the database schema.
    Returns JSON containing SQL query and recommended chart type.
    """
-   schema = get_schema()
+   schema = get_schema_and_samples()
    prompt = f"""
 You are an expert data analyst and SQL specialist responsible for converting business questions into SQL queries for a business intelligence dashboard.
 Your goal is to translate a natural language question into a correct SQL query using the provided database schema.
-DATABASE SCHEMA:{schema}
+DATABASE STRUCTURE AND SAMPLE DATA:{schema}
 USER QUESTION:{question}
 
 TASK:
@@ -100,6 +106,7 @@ Before writing the SQL query:
 1. Identify the table(s) relevant to the user question.
 2. Identify the column(s) needed to answer the question.
 3. Ensure every column used in the SQL query exists in the schema.
+4. Use the sample rows to understand how values are formatted in the dataset.
 Only after confirming the relevant tables and columns, generate the SQL query.
 
 SQL RULES:
@@ -109,11 +116,12 @@ SQL RULES:
 4. Do not invent columns or tables.
 5. Write the SQL query in a SINGLE LINE.
 6. Prefer aggregation when analyzing data (SUM, AVG, COUNT).
-7. Use GROUP BY when aggregating by categories.
-8. Use ORDER BY when ranking or sorting results.
-9. Use LIMIT when returning top results.
-10. Use LOWER() for case-insensitive string comparisons if filtering text values.
-11. Avoid returning large raw datasets unless explicitly requested.
+7. Use the sample rows only to understand how data values look.Do not assume they represent the entire dataset.
+8. Use GROUP BY when aggregating by categories.
+9. Use ORDER BY when ranking or sorting results.
+10. Use LIMIT when returning top results.
+11. Use LOWER() for case-insensitive string comparisons if filtering text values.
+12. Avoid returning large raw datasets unless explicitly requested.
 
 CHART SELECTION RULES:
 Choose the chart type based on the query result:
